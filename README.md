@@ -20,7 +20,7 @@ npm install use-strict-cli -g
 
 Command line help:
 ```bash
-use-strict [dir1] [dir2] [dirX] [--remove]
+use-strict [dir1] [dir2] [dirX] [--remove] [--prefer statement]
 ```
 
 All `*.js` files found within given directories and
@@ -52,13 +52,13 @@ You will be prompted to confirm operation before changes will be saved.
 
 ```bash
 cd ~/myproject
-use-strict ./src
+use-strict ./src --prefer '"use strict";'
 
 Scanning following directories:
 - /Users/johndoe/myproject/src
 
 
-"use strict" statement will be added to the following files:
+"use strict"; statement will be added to the following files:
 - server.js
 - cluster.js
 
