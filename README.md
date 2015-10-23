@@ -19,6 +19,11 @@ use-strict [dir1] [dir2] [dirX] [--remove]
 All `*.js` files found within given directories and
 their sub-directories will be scanned.
 
+Before running this command line tool it is recommended
+that you commit your current changes to source control
+or create a backup in case there are any undesirable
+changes.
+
 **Options:**
 - `--remove`: Remove `'use strict'` statements
 
