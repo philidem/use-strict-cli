@@ -1,7 +1,14 @@
 use-strict-cli
 ==============
 This command line tool can be used to add or remove `'use strict';`
-from all JavaScript files within a directory.
+from all JavaScript files within a directory. This tool is helpful
+if you find yourself wanting to adopt new ES6 language features that
+are only available if "use strict" statement is added to file.
+
+For example, if you're trying to use `let` statements in Node.js 4
+then you'll see this error if JavaScript file does not have "use strict":
+
+`SyntaxError: Block-scoped declarations (let, const, function, class) not yet supported outside strict mode`
 
 ## Installation
 
