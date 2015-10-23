@@ -29,7 +29,7 @@ function processFiles(files, options) {
                 contents = contents.substring(0, pos) + contents.substring(pos + str.length);
             }
         } else {
-            contents = '\'use strict\';\n' + contents;
+            contents = options.prefer + '\n\n' + contents;
         }
 
         fs.writeFileSync(file.absolutePath, contents, {encoding: 'utf8'});
@@ -37,6 +37,8 @@ function processFiles(files, options) {
 }
 
 exports.run = function(options) {
+    options.prefer = options.prefer || '\'use strict\';';
+
     var dir = options.dir || process.cwd();
 
     var work = [];
@@ -53,44 +55,52 @@ exports.run = function(options) {
         dir[i] = path.resolve(process.cwd(), dir[i]);
     }
 
-    console.log('\nScanning following directories:');
+    console.log('\nScanning following directories or files:');
     console.log(dir.map(function(dir) {
-        return ('- ' + dir).gray + '\n';
+        return (' - ' + dir).gray + '\n';
     }).join(''));
     console.log();
 
     var files = [];
     var remove = options.remove = (options.remove === true);
 
+    function onFile(file, dir) {
+        if (jsRegex.test(file)) {
+            var fileRelativePath = dir ? file.substring(dir.length + 1) : file;
+            var contents = fs.readFileSync(file, {encoding: 'utf8'});
+            var regex = /(?:\'use strict\'|\"use strict\");?(\r?\n)+/g;
+            var match = regex.exec(contents);
+
+            if ((match && remove) || (!match && !remove)) {
+                files.push({
+                    absolutePath: file,
+                    relativePath: fileRelativePath,
+                    match: match,
+                    contents: contents,
+                    regex: regex
+                });
+            }
+        }
+    }
+
     dir.forEach(function(dir) {
-        work.push(function(callback) {
-            directoryWalker.create()
-                .onFile(function(file, stat) {
+        var stat = fs.statSync(dir);
+        if (stat.isFile()) {
+            onFile(dir, stat);
+        } else {
+            work.push(function(callback) {
+                directoryWalker.create()
+                    .onFile(function(file, stat) {
+                        onFile(file, dir);
+                    })
 
-                    if (jsRegex.test(file)) {
-                        var fileRelativePath = file.substring(dir.length + 1);
-                        var contents = fs.readFileSync(file, {encoding: 'utf8'});
-                        var regex = /(?:\'use strict\'|\"use strict\");?\n?/g;
-                        var match = regex.exec(contents);
+                    .onComplete(function() {
+                        callback();
+                    })
 
-                        if ((match && remove) || (!match && !remove)) {
-                            files.push({
-                                absolutePath: file,
-                                relativePath: fileRelativePath,
-                                match: match,
-                                contents: contents,
-                                regex: regex
-                            });
-                        }
-                    }
-                })
-
-                .onComplete(function() {
-                    callback();
-                })
-
-                .walk(dir);
-        });
+                    .walk(dir);
+            });
+        }
     });
 
     series(work, function(err) {
@@ -102,11 +112,11 @@ exports.run = function(options) {
         if (remove) {
             console.log('"use strict" statement will be removed from the following files:');
         } else {
-            console.log('"use strict" statement will be added to the following files:');
+            console.log(options.prefer + ' will be added to the following files:');
         }
 
         console.log(files.map(function(file) {
-            return ('- ' + file.relativePath).green + '\n';
+            return (' - ' + file.relativePath).green + '\n';
         }).join(''));
 
         console.log('');

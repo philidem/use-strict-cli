@@ -25,7 +25,9 @@ or create a backup in case there are any undesirable
 changes.
 
 **Options:**
+- `--help`: Help on using this command
 - `--remove`: Remove `'use strict'` statements
+- `--prefer`: Preferred "use strict" statement (e.g. `"use strict";`)
 
 **Add `'use strict';` to all files that do not already have it:**
 ```bash
