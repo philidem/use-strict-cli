@@ -32,8 +32,7 @@ use-strict ./src
 use-strict ./src --remove
 ```
 
-You will be prompted to confirm operation to update files that will
-be updated.
+You will be prompted to confirm operation before changes will be saved.
 
 ## Example
 
