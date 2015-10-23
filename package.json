@@ -1,0 +1,35 @@
+{
+  "name": "use-strict-cli",
+  "version": "1.0.0",
+  "description": "Adds or removes \"use strict\" from all JavaScript files within directory",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/philidem/use-strict-cli.git"
+  },
+  "keywords": [
+    "use",
+    "strict",
+    "es6",
+    "usestrict"
+  ],
+  "author": "Phillip Gates-Idem <phillip.idem@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/philidem/use-strict-cli/issues"
+  },
+  "homepage": "https://github.com/philidem/use-strict-cli#readme",
+  "bin": {
+    "use-strict": "bin/use-strict"
+  },
+  "dependencies": {
+    "colors": "^1.1.2",
+    "directory-walker": "^1.2.5",
+    "minimist": "^1.2.0",
+    "prompt": "^0.2.14",
+    "raptor-async": "^1.1.2"
+  }
+}
