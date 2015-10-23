@@ -27,7 +27,7 @@ their sub-directories will be scanned.
 use-strict ./src
 ```
 
-**Remove `'use strict';` remove all files that have it:**
+**Remove `'use strict';` from all files that have it:**
 ```bash
 use-strict ./src --remove
 ```
